@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Locket Video Uploader</title>
+</head>
+<body>
+    <h1>Upload Video to Locket</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <label for="videoFile">Video File:</label>
+        <input type="file" id="videoFile" name="videoFile" accept="video/*" required><br><br>
+        
+        <label for="imageFile">Thumbnail Image:</label>
+        <input type="file" id="imageFile" name="imageFile" accept="image/*" required><br><br>
+        
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const responseDiv = document.getElementById('response');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const videoFile = document.getElementById('videoFile').files[0];
+            const imageFile = document.getElementById('imageFile').files[0];
+
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('video_file_path', videoFile.name);
+            formData.append('thumbnail_image_path', imageFile.name);
+
+            // You'll need to handle the actual file upload and sending the data to your Flask backend.
+            // This is a simplified example and doesn't include that part.
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                responseDiv.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error:', error);
+                responseDiv.innerHTML = 'An error occurred.';
+            }
+        });
+    </script>
+</body>
+</html>
